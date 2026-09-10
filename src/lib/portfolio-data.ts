@@ -35,6 +35,24 @@ export const projects: Project[] = [
     year: "2024",
     stack: ["React", "TypeScript", "Firebase"],
   },
+  {
+    title: "Festival Twin Finder",
+    summary:
+      "An AI that translates culture, not just words. Upload any festival — text, photo, or video — and get equivalent experiences in your country within seconds.",
+    live: "https://festival-twin-finder.netlify.app/",
+    github: "https://github.com/ExamSense/festival-twin-seeker",
+    year: "2025",
+    stack: ["React", "AI", "Netlify"],
+  },
+  {
+    title: "ExamSense",
+    summary:
+      "A smart practice testing platform that helps WASSCE candidates identify weak topics through AI-powered analysis, turning practice tests into targeted learning paths.",
+    live: "https://exam-sense.netlify.app/",
+    github: "https://github.com/ExamSense/ExamSense.git",
+    year: "2024",
+    stack: ["React", "TypeScript", "Firebase"],
+  },
 ];
 
 export const skills: string[] = [

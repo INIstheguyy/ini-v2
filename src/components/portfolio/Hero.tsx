@@ -66,7 +66,7 @@ export function Hero() {
         <br />
         KOMOLAFE
       </h1>
-      <p data-hero-item className="mt-10 max-w-md text-lg font-[500] leading-relaxed text-ink-2">
+      <p data-hero-item className="mt-10 max-w-md text-lg lg:text-xl font-[500] leading-relaxed text-ink-2">
         Software engineer across web and mobile. I build accessible, responsive interfaces — and the
         systems underneath them — with a bias for clean code, interpretation of business ideas, user
         needs & how everything connects.
@@ -80,20 +80,19 @@ export function Hero() {
           {/* <p data-about-line className="text-2xl leading-snug font-medium text-ink-1 md:text-3xl">
             I'm a front-end engineer with a habit of building clean, accessible, web experiences.
           </p> */}
-          <p data-about-line className="text-lg leading-relaxed text-ink-2">
+          <p data-about-line className="text-lg lg:text-xl leading-relaxed text-ink-2">
             My current work focuses on modern web and mobile development, while I’m expanding my
             knowledge of backend architecture and system design to become a more well-rounded
             software engineer.
           </p>
-          <p data-about-line className="text-lg leading-relaxed text-ink-2">
+          <p data-about-line className="text-lg lg:text-xl leading-relaxed text-ink-2">
             Outside the editor, I’m fascinated by the analysis and business of football — from
             tactical breakdowns to the economics behind the sport. I'm curious about human
             psychology, often exploring it through podcasts, as well as historical and
             narcotics-related documentaries that reveal how people and societies evolve.
           </p>
-          <p data-about-line className="text-lg leading-relaxed text-ink-2">
-            At the core: I'm driven by learning, problem-solving, and turning complex ideas into solutions that
-            solve problems.
+          <p data-about-line className="text-lg lg:text-xl leading-relaxed text-ink-2">
+            At the core: I'm driven by learning, problem-solving, and turning complex ideas into solutions.
           </p>
         </div>
       </div>
