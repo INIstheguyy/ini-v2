@@ -84,9 +84,9 @@ export function Work() {
            <h2 className="font-display text-xs font-medium tracking-[0.2em] text-ink-4 uppercase">
           Work
         </h2>
-          <ul className="mt-8 border-t-2 border-ink-1">
+          <ul className="mt-8 ">
             {projects.map((project, index) => (
-              <li key={project.title} data-work-item className="border-b-2 border-ink-1">
+              <li key={project.title} data-work-item className=" ">
                 <article>
                   <div className="grid grid-cols-[2.5rem_1fr] items-baseline gap-4 py-4 md:grid-cols-[3.5rem_1fr_auto] md:py-5">
                     <p className="font-display text-sm font-medium text-ink-3">{index + 1}.</p>

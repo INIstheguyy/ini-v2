@@ -1,0 +1,153 @@
+.frame {
+  position: relative;
+  min-height: 25rem;
+  overflow: hidden;
+  border: 1px solid color-mix(in oklch, var(--ink-4) 38%, transparent);
+  border-radius: 1.5rem;
+  background:
+    radial-gradient(
+      circle at 50% 46%,
+      color-mix(in oklch, var(--surface-3) 62%, transparent),
+      transparent 46%
+    ),
+    linear-gradient(color-mix(in oklch, var(--ink-4) 12%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in oklch, var(--ink-4) 12%, transparent) 1px, transparent 1px);
+  background-size:
+    auto,
+    3rem 3rem,
+    3rem 3rem;
+  isolation: isolate;
+}
+
+.canvas {
+  position: absolute;
+  inset: 0;
+}
+
+.label {
+  position: absolute;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  min-width: 5.75rem;
+  padding: 0.45rem 0.65rem;
+  border: 1px solid color-mix(in oklch, var(--ink-4) 48%, transparent);
+  border-radius: 0.75rem;
+  background: color-mix(in oklch, var(--surface-1) 82%, transparent);
+  color: var(--ink-2);
+  font: inherit;
+  text-align: left;
+  backdrop-filter: blur(6px);
+  cursor: pointer;
+  transition:
+    border-color 180ms ease,
+    background-color 180ms ease,
+    color 180ms ease;
+}
+
+.label:hover,
+.label:focus-visible,
+.label[data-active="true"] {
+  border-color: var(--ink-1);
+  background: var(--surface-2);
+  color: var(--ink-1);
+  outline: none;
+}
+
+.label strong {
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.label span {
+  display: none;
+  font-size: 0.68rem;
+  color: var(--ink-3);
+}
+
+.interface {
+  left: 50%;
+  top: 4%;
+  transform: translateX(-50%);
+}
+.logic {
+  left: 2%;
+  top: 43%;
+}
+.data {
+  left: 50%;
+  bottom: 4%;
+  transform: translateX(-50%);
+}
+.integrations {
+  right: 2%;
+  top: 43%;
+}
+
+.coreLabel {
+  position: absolute;
+  left: 50%;
+  top: 48%;
+  z-index: 2;
+  transform: translate(-50%, -50%);
+  color: var(--ink-1);
+  font-family: var(--font-display);
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+
+.loading {
+  display: grid;
+  min-height: 25rem;
+  place-items: center;
+  border: 1px solid color-mix(in oklch, var(--ink-4) 32%, transparent);
+  border-radius: 1.5rem;
+  color: var(--ink-4);
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+@media (min-width: 768px) {
+  .frame,
+  .loading {
+    min-height: 31rem;
+  }
+
+  .label {
+    min-width: 8.5rem;
+  }
+
+  .label span {
+    display: block;
+  }
+
+  .interface {
+    top: 5%;
+  }
+  .logic {
+    left: 3%;
+    top: 44%;
+  }
+  .data {
+    bottom: 5%;
+  }
+  .integrations {
+    right: 3%;
+    top: 44%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .label {
+    transition: none;
+  }
+}

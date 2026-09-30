@@ -3,16 +3,14 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Nav } from "@/components/portfolio/Nav";
 import { Hero } from "@/components/portfolio/Hero";
 
-import { WhatIDo } from "@/components/portfolio/WhatIDo";
 import { SystemsMap } from "@/components/portfolio/SystemsMap";
 import { Work } from "@/components/portfolio/Work";
 import { Experiments } from "@/components/portfolio/Experiments";
 import { Contact } from "@/components/portfolio/Contact";
-import { Footer } from "@/components/portfolio/Footer";
 
-const title = "Inioluwa Komolafe — Systems Engineer, Web & Mobile";
+const title = "Inioluwa Komolafe — Software Engineer";
 const description =
-  "Portfolio of Inioluwa Komolafe (inistheguyy): front-end and systems engineer building accessible, responsive web and mobile interfaces in React and TypeScript.";
+  "Portfolio of Inioluwa Komolafe (inistheguyy): Software engineer building accessible, responsive web and mobile interfaces in React and TypeScript.";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -34,18 +32,16 @@ function Index() {
       <Nav />
       <main>
         <Hero />
-        <section id="what-i-do" className="mx-auto flex max-w-5xl flex-col gap-10 px-6 py-28 md:gap-14 md:px-10 md:py-40">
+        <section id="what-i-do" className="mx-auto flex max-w-5xl flex-col gap-10 px-6 pt-28 md:gap-14 md:px-10 md:pt-40">
           <h2 className="font-display text-xs font-medium tracking-[0.2em] text-ink-4 uppercase">
             What I Do
           </h2>
           <SystemsMap />
-          <WhatIDo />
         </section>
         <Work />
-        <Experiments />
+        {/* <Experiments /> */}
         <Contact />
       </main>
-      <Footer />
     </div>
   );
 }
