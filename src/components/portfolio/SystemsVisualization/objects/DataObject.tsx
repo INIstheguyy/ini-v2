@@ -1,37 +1,62 @@
+import { SCENE_CONFIG } from "../scene-config";
 import type { ScenePalette } from "../scene-types";
+import { objectDetailOpacity, PanelDetail, SoftwarePanel } from "./SoftwarePanel";
 
-export function DataObject({
-  emphasized,
-  palette,
-  mobile,
-}: {
+type DataObjectProps = {
   emphasized: boolean;
-  palette: ScenePalette;
+  dimmed: boolean;
   mobile: boolean;
-}) {
-  const layers = mobile ? [-0.26, 0, 0.26] : [-0.32, -0.1, 0.12, 0.34];
+  palette: ScenePalette;
+};
+
+export function DataObject({ emphasized, dimmed, mobile, palette }: DataObjectProps) {
+  const config = SCENE_CONFIG.objects.data;
+  const opacity = objectDetailOpacity(emphasized, dimmed);
+  const cards = mobile ? config.cardPositions.slice(1) : config.cardPositions;
 
   return (
-    <group rotation={[0.06, -0.2, 0]}>
-      {layers.map((y) => (
-        <group key={y} position={[0, y, 0]}>
-          <mesh>
-            <cylinderGeometry args={[0.62, 0.62, 0.24, mobile ? 18 : 24]} />
-            <meshStandardMaterial
-              color={emphasized ? palette.solidActive : palette.solid}
-              roughness={0.86}
-              metalness={0.03}
-            />
-          </mesh>
-          <mesh scale={1.01}>
-            <cylinderGeometry args={[0.62, 0.62, 0.24, mobile ? 18 : 24]} />
-            <meshBasicMaterial
+    <group rotation={SCENE_CONFIG.objects.rotations.data}>
+      {cards.map((position, index) => (
+        <group key={index} position={position}>
+          <SoftwarePanel
+            size={config.cardSize}
+            palette={palette}
+            emphasized={emphasized}
+            dimmed={dimmed}
+          >
+            <PanelDetail
+              position={[-0.24, 0, 0]}
+              size={[0.018, 0.56, 0.012]}
               color={palette.edge}
-              opacity={emphasized ? 0.86 : 0.38}
-              transparent
-              wireframe
+              opacity={opacity * 0.48}
             />
-          </mesh>
+            <PanelDetail
+              position={[0.1, 0, 0]}
+              size={[0.018, 0.56, 0.012]}
+              color={palette.edge}
+              opacity={opacity * 0.36}
+            />
+            <PanelDetail
+              position={[0, 0.13, 0]}
+              size={[1.02, 0.018, 0.012]}
+              color={palette.edge}
+              opacity={opacity * 0.58}
+            />
+            <PanelDetail
+              position={[0, -0.03, 0]}
+              size={[1.02, 0.015, 0.012]}
+              color={palette.edge}
+              opacity={opacity * 0.34}
+            />
+            {!mobile && (
+              <PanelDetail
+                position={[0, -0.18, 0]}
+                size={[1.02, 0.015, 0.012]}
+                color={palette.edge}
+                opacity={opacity * 0.28}
+              />
+            )}
+          </SoftwarePanel>
         </group>
       ))}
     </group>

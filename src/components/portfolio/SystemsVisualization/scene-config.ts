@@ -1,4 +1,9 @@
 export const SCENE_CONFIG = {
+  viewport: {
+    preloadMargin: "260px 0px",
+    introVisibilityThreshold: 0.55,
+    introDelayMs: 250,
+  },
   camera: {
     desktop: { position: [0, 0.1, 8.8] as [number, number, number], fov: 40 },
     mobile: { position: [0, 0.15, 8.4] as [number, number, number], fov: 43 },
@@ -15,9 +20,93 @@ export const SCENE_CONFIG = {
     directionalPosition: [3.5, 4.5, 6] as [number, number, number],
   },
   animation: {
-    stepDurationMs: 1080,
-    pulseTravelSeconds: 0.9,
-    corePulseStrength: 0.05,
-    activeObjectScale: 1.055,
+    intro: {
+      applicationLayerStaggerMs: 140,
+      moduleStartMs: 520,
+      moduleStaggerMs: 150,
+      connectionStartMs: 1240,
+      connectionStaggerMs: 110,
+      lineRevealSeconds: 0.42,
+      settleMs: 2050,
+      moduleDamping: 7.5,
+      applicationDamping: 9,
+    },
+    activeObjectScale: 1.035,
+    activeObjectLift: 0.055,
+    activeObjectDepth: 0.045,
+    activeApplicationScale: 1.018,
+    activeApplicationSeparation: 0.035,
+    idleFloatDesktop: 0.018,
+    idleFloatMobile: 0.009,
+    idleApplicationFloat: 0.012,
+  },
+  objects: {
+    baseScaleDesktop: 1.15,
+    baseScaleMobile: 1.12,
+    appearance: {
+      surfaceOpacity: 0.94,
+      dimmedSurfaceOpacity: 0.62,
+      detailOpacity: 0.48,
+      emphasizedDetailOpacity: 0.9,
+      dimmedDetailOpacity: 0.2,
+    },
+    rotations: {
+      interface: [-0.12, -0.32, 0.035] as [number, number, number],
+      logic: [0.12, 0.34, -0.07] as [number, number, number],
+      data: [0.1, -0.3, 0.035] as [number, number, number],
+      integrations: [0.06, -0.18, 0.04] as [number, number, number],
+    },
+    entryOffsets: {
+      interface: [0, 0.12, -0.1] as [number, number, number],
+      logic: [-0.1, 0, -0.08] as [number, number, number],
+      data: [0, -0.12, -0.1] as [number, number, number],
+      integrations: [0.1, 0, -0.08] as [number, number, number],
+    },
+    application: {
+      backSize: [1.48, 0.86, 0.075] as [number, number, number],
+      middleSize: [1.55, 0.9, 0.08] as [number, number, number],
+      frontSize: [1.68, 0.98, 0.09] as [number, number, number],
+      layerPositions: [
+        [-0.18, 0.16, -0.24],
+        [0.13, 0.08, -0.1],
+        [0, -0.06, 0.1],
+      ] as [number, number, number][],
+      entryOffset: [0, 0.1, -0.12] as [number, number, number],
+    },
+    interface: {
+      browserSize: [1.18, 0.7, 0.08] as [number, number, number],
+      browserPosition: [-0.18, 0.05, 0] as [number, number, number],
+      phoneSize: [0.4, 0.78, 0.09] as [number, number, number],
+      phonePosition: [0.57, -0.12, 0.2] as [number, number, number],
+    },
+    logic: {
+      backSize: [1.24, 0.76, 0.065] as [number, number, number],
+      backPosition: [-0.15, 0.12, -0.14] as [number, number, number],
+      frontSize: [1.38, 0.86, 0.085] as [number, number, number],
+      frontPosition: [0.06, -0.04, 0.12] as [number, number, number],
+    },
+    data: {
+      cardSize: [1.08, 0.62, 0.065] as [number, number, number],
+      cardPositions: [
+        [-0.14, 0.14, -0.1],
+        [0, 0, 0.08],
+        [0.14, -0.14, 0.26],
+      ] as [number, number, number][],
+    },
+    integrations: {
+      apiSize: [0.62, 0.84, 0.085] as [number, number, number],
+      apiPosition: [-0.34, 0, 0.12] as [number, number, number],
+      serviceSize: [0.48, 0.24, 0.075] as [number, number, number],
+      servicePositions: [
+        [0.48, 0.33, -0.04],
+        [0.58, 0, 0.06],
+        [0.48, -0.33, -0.02],
+      ] as [number, number, number][],
+    },
+  },
+  connections: {
+    idleOpacity: 0.25,
+    dimmedOpacity: 0.13,
+    emphasizedOpacity: 0.92,
   },
 } as const;

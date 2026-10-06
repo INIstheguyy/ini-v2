@@ -92,6 +92,7 @@ export default function SystemsVisualization({
             type="button"
             className={`${styles["label"]} ${styles[key]}`}
             data-active={activeSystem === key}
+            data-dimmed={activeSystem !== null && activeSystem !== key}
             aria-pressed={activeSystem === key}
             onPointerEnter={() => hoverCapable && onActiveSystemChange(key)}
             onPointerLeave={() => hoverCapable && onActiveSystemChange(null)}

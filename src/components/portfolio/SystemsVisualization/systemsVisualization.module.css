@@ -1,17 +1,27 @@
 .frame {
+  --systems-frame-border-strength: 18%;
+  --systems-grid-strength: 5%;
   position: relative;
   min-height: 25rem;
   overflow: hidden;
-  border: 1px solid color-mix(in oklch, var(--ink-4) 38%, transparent);
+  border: 1px solid
+    color-mix(in oklch, var(--ink-4) var(--systems-frame-border-strength), transparent);
   border-radius: 1.5rem;
   background:
     radial-gradient(
       circle at 50% 46%,
-      color-mix(in oklch, var(--surface-3) 62%, transparent),
+      color-mix(in oklch, var(--surface-3) 42%, transparent),
       transparent 46%
     ),
-    linear-gradient(color-mix(in oklch, var(--ink-4) 12%, transparent) 1px, transparent 1px),
-    linear-gradient(90deg, color-mix(in oklch, var(--ink-4) 12%, transparent) 1px, transparent 1px);
+    linear-gradient(
+      color-mix(in oklch, var(--ink-4) var(--systems-grid-strength), transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      color-mix(in oklch, var(--ink-4) var(--systems-grid-strength), transparent) 1px,
+      transparent 1px
+    );
   background-size:
     auto,
     3rem 3rem,
@@ -30,29 +40,34 @@
   display: flex;
   flex-direction: column;
   gap: 0.1rem;
-  min-width: 5.75rem;
-  padding: 0.45rem 0.65rem;
-  border: 1px solid color-mix(in oklch, var(--ink-4) 48%, transparent);
-  border-radius: 0.75rem;
-  background: color-mix(in oklch, var(--surface-1) 82%, transparent);
+  min-width: 5.25rem;
+  padding: 0.25rem 0;
+  border: 0;
+  background: transparent;
   color: var(--ink-2);
   font: inherit;
   text-align: left;
-  backdrop-filter: blur(6px);
   cursor: pointer;
   transition:
-    border-color 180ms ease,
-    background-color 180ms ease,
-    color 180ms ease;
+    color 180ms ease,
+    opacity 180ms ease,
+    transform 180ms ease;
 }
 
 .label:hover,
 .label:focus-visible,
 .label[data-active="true"] {
-  border-color: var(--ink-1);
-  background: var(--surface-2);
   color: var(--ink-1);
   outline: none;
+}
+
+.label:hover,
+.label:focus-visible {
+  opacity: 1;
+}
+
+.label[data-dimmed="true"] {
+  opacity: 0.48;
 }
 
 .label strong {
@@ -71,27 +86,27 @@
 
 .interface {
   left: 50%;
-  top: 4%;
+  top: 2%;
   transform: translateX(-50%);
 }
 .logic {
   left: 2%;
-  top: 43%;
+  top: 45%;
 }
 .data {
   left: 50%;
-  bottom: 4%;
+  bottom: 2%;
   transform: translateX(-50%);
 }
 .integrations {
   right: 2%;
-  top: 43%;
+  top: 45%;
 }
 
 .coreLabel {
   position: absolute;
   left: 50%;
-  top: 48%;
+  top: 59%;
   z-index: 2;
   transform: translate(-50%, -50%);
   color: var(--ink-1);
@@ -123,7 +138,7 @@
   }
 
   .label {
-    min-width: 8.5rem;
+    min-width: 7.5rem;
   }
 
   .label span {
@@ -131,18 +146,26 @@
   }
 
   .interface {
-    top: 5%;
+    left: 62%;
+    top: 11%;
+    transform: none;
   }
   .logic {
-    left: 3%;
-    top: 44%;
+    left: 6%;
+    top: 61%;
   }
   .data {
-    bottom: 5%;
+    left: 60%;
+    bottom: 7%;
+    transform: none;
   }
   .integrations {
-    right: 3%;
-    top: 44%;
+    right: 5%;
+    top: 61%;
+  }
+
+  .coreLabel {
+    top: 62%;
   }
 }
 

@@ -1,6 +1,7 @@
 import { lazy, Suspense, useEffect, useRef, useState } from "react";
 
 import type { SystemKey } from "./systems-data";
+import { SCENE_CONFIG } from "./scene-config";
 import styles from "./systemsVisualization.module.css";
 
 const SystemsVisualization = lazy(() => import("./SystemsVisualization"));
@@ -40,10 +41,18 @@ export function LazySystemsVisualization({
   const reducedMotion = useMediaQuery("(prefers-reduced-motion: reduce)");
 
   useEffect(() => {
+    let introTimer: number | undefined;
+    const scheduleIntro = () => {
+      introTimer ??= window.setTimeout(
+        () => setPlayIntro(true),
+        SCENE_CONFIG.viewport.introDelayMs,
+      );
+    };
+
     if (!marker.current || !("IntersectionObserver" in window)) {
       setShouldLoad(true);
-      setPlayIntro(true);
-      return;
+      scheduleIntro();
+      return () => window.clearTimeout(introTimer);
     }
 
     const preloadObserver = new IntersectionObserver(
@@ -53,22 +62,23 @@ export function LazySystemsVisualization({
           preloadObserver.disconnect();
         }
       },
-      { rootMargin: "260px 0px", threshold: 0.01 },
+      { rootMargin: SCENE_CONFIG.viewport.preloadMargin, threshold: 0.01 },
     );
     const entryObserver = new IntersectionObserver(
       ([entry]) => {
         if (entry?.isIntersecting) {
-          setPlayIntro(true);
+          scheduleIntro();
           entryObserver.disconnect();
         }
       },
-      { threshold: 0.2 },
+      { threshold: SCENE_CONFIG.viewport.introVisibilityThreshold },
     );
     preloadObserver.observe(marker.current);
     entryObserver.observe(marker.current);
     return () => {
       preloadObserver.disconnect();
       entryObserver.disconnect();
+      window.clearTimeout(introTimer);
     };
   }, []);
 

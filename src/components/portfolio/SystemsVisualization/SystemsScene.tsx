@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { ApplicationCore } from "./objects/ApplicationCore";
 import { DataObject } from "./objects/DataObject";
@@ -6,20 +6,12 @@ import { IntegrationsObject } from "./objects/IntegrationsObject";
 import { InterfaceObject } from "./objects/InterfaceObject";
 import { LogicObject } from "./objects/LogicObject";
 import { Connection } from "./Connection";
-import { SignalPulse } from "./SignalPulse";
-import { SystemNode } from "./SystemNode";
-import {
-  CONNECTIONS,
-  CORE_POSITION,
-  INTRO_ROUTE,
-  SYSTEMS,
-  positionFor,
-  type SystemKey,
-} from "./systems-data";
-import type { ScenePalette } from "./scene-types";
 import { SCENE_CONFIG } from "./scene-config";
+import type { ScenePalette } from "./scene-types";
+import { SystemNode } from "./SystemNode";
+import { CONNECTIONS, CORE_POSITION, SYSTEMS, positionFor, type SystemKey } from "./systems-data";
 
-const STEP_DURATION = SCENE_CONFIG.animation.stepDurationMs;
+const MODULE_ORDER: SystemKey[] = ["interface", "logic", "data", "integrations"];
 
 type SystemsSceneProps = {
   activeSystem: SystemKey | null;
@@ -38,39 +30,79 @@ export function SystemsScene({
   playIntro,
   palette,
 }: SystemsSceneProps) {
-  const [sequenceStep, setSequenceStep] = useState(-1);
+  const [applicationStage, setApplicationStage] = useState(reducedMotion ? 3 : 0);
+  const [visibleModuleCount, setVisibleModuleCount] = useState(
+    reducedMotion ? MODULE_ORDER.length : 0,
+  );
+  const [visibleConnectionCount, setVisibleConnectionCount] = useState(
+    reducedMotion ? CONNECTIONS.length : 0,
+  );
+  const [introComplete, setIntroComplete] = useState(reducedMotion);
 
   useEffect(() => {
-    if (reducedMotion || !playIntro) {
-      setSequenceStep(-1);
+    if (reducedMotion) {
+      setApplicationStage(3);
+      setVisibleModuleCount(MODULE_ORDER.length);
+      setVisibleConnectionCount(CONNECTIONS.length);
+      setIntroComplete(true);
       return;
     }
 
-    setSequenceStep(0);
-    const timers = INTRO_ROUTE.slice(1).map((_, index) =>
-      window.setTimeout(() => setSequenceStep(index + 1), (index + 1) * STEP_DURATION),
-    );
-    timers.push(window.setTimeout(() => setSequenceStep(-1), INTRO_ROUTE.length * STEP_DURATION));
+    if (!playIntro) {
+      setApplicationStage(0);
+      setVisibleModuleCount(0);
+      setVisibleConnectionCount(0);
+      setIntroComplete(false);
+      return;
+    }
+
+    const intro = SCENE_CONFIG.animation.intro;
+    const timers: number[] = [];
+    setApplicationStage(1);
+    setVisibleModuleCount(0);
+    setVisibleConnectionCount(0);
+    setIntroComplete(false);
+
+    [2, 3].forEach((stage, index) => {
+      timers.push(
+        window.setTimeout(
+          () => setApplicationStage(stage),
+          (index + 1) * intro.applicationLayerStaggerMs,
+        ),
+      );
+    });
+
+    MODULE_ORDER.forEach((_, index) => {
+      timers.push(
+        window.setTimeout(
+          () => setVisibleModuleCount(index + 1),
+          intro.moduleStartMs + index * intro.moduleStaggerMs,
+        ),
+      );
+    });
+
+    CONNECTIONS.forEach((_, index) => {
+      timers.push(
+        window.setTimeout(
+          () => setVisibleConnectionCount(index + 1),
+          intro.connectionStartMs + index * intro.connectionStaggerMs,
+        ),
+      );
+    });
+
+    timers.push(window.setTimeout(() => setIntroComplete(true), intro.settleMs));
     return () => timers.forEach(window.clearTimeout);
   }, [playIntro, reducedMotion]);
 
-  const route = sequenceStep >= 0 ? INTRO_ROUTE[sequenceStep] : undefined;
-  const sourceSystem = route?.from === "core" ? null : (route?.from ?? null);
-  const coreMoment = useMemo(() => {
-    if (!route) return null;
-    if (route.to === "core") return 0.83;
-    if (route.from === "core") return 0.14;
-    return null;
-  }, [route]);
-
-  const renderSystem = (key: SystemKey) => {
-    const emphasized = activeSystem === key || sourceSystem === key;
-    const common = { emphasized, palette };
+  const renderSystem = (key: SystemKey, index: number) => {
+    const emphasized = activeSystem === key;
+    const dimmed = activeSystem !== null && activeSystem !== key;
+    const common = { emphasized, dimmed, palette, mobile };
     const object = {
       interface: <InterfaceObject {...common} />,
       logic: <LogicObject {...common} />,
-      data: <DataObject {...common} mobile={mobile} />,
-      integrations: <IntegrationsObject {...common} mobile={mobile} />,
+      data: <DataObject {...common} />,
+      integrations: <IntegrationsObject {...common} />,
     }[key];
 
     return (
@@ -78,7 +110,9 @@ export function SystemsScene({
         key={key}
         system={key}
         position={positionFor(key, mobile)}
-        active={activeSystem === key}
+        active={emphasized}
+        revealed={index < visibleModuleCount}
+        idle={introComplete}
         mobile={mobile}
         reducedMotion={reducedMotion}
         onActiveChange={onActiveSystemChange}
@@ -104,22 +138,18 @@ export function SystemsScene({
         }
       />
 
-      {CONNECTIONS.map((connection) => {
+      {CONNECTIONS.map((connection, index) => {
         const selected =
           activeSystem !== null &&
           (connection.from === activeSystem || connection.to === activeSystem);
-        const inIntro =
-          route !== undefined &&
-          ((connection.from === route.from && connection.to === route.to) ||
-            (connection.from === route.to && connection.to === route.from));
         return (
           <Connection
             key={connection.id}
             from={positionFor(connection.from, mobile)}
             to={positionFor(connection.to, mobile)}
-            emphasized={selected || inIntro}
-            secondary={connection.secondary ?? false}
-            mobile={mobile}
+            emphasized={selected}
+            dimmed={activeSystem !== null && !selected}
+            revealed={index < visibleConnectionCount}
             palette={palette}
           />
         );
@@ -130,22 +160,13 @@ export function SystemsScene({
           palette={palette}
           reducedMotion={reducedMotion}
           mobile={mobile}
-          sequenceStep={sequenceStep}
-          coreMoment={coreMoment}
+          introStage={applicationStage}
+          active={activeSystem !== null}
+          idle={introComplete}
         />
       </group>
 
-      {(Object.keys(SYSTEMS) as SystemKey[]).map(renderSystem)}
-
-      {route && (
-        <SignalPulse
-          key={route.id}
-          from={positionFor(route.from, mobile)}
-          to={positionFor(route.to, mobile)}
-          color={palette.pulse}
-          mobile={mobile}
-        />
-      )}
+      {MODULE_ORDER.map(renderSystem)}
     </>
   );
 }
